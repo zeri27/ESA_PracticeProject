@@ -27,15 +27,20 @@ def optimized_knn(x_train, y_train):
     # Trains a k-nearest neighbor classifier on the given training sets
     # with optimized parameters found through a grid search
 
-    # Start grid search with number of neighbors between 1 and 29 (inclusive)
+    # Start grid search with number of neighbors between 1 and 29 (inclusive),
+    # taking only the odd numbers
     grid = GridSearchCV(KNeighborsClassifier(),
-                        param_grid={'n_neighbors': range(1, 30)},
-                        n_jobs=-1, cv=5, refit=True, verbose=1)
+                        param_grid={'n_neighbors': range(1, 30, 2),
+                                    'weights': ['uniform', 'distance'],
+                                    'metric': ['minkowski', 'euclidean', 'manhattan', 'cosine']},
+                        n_jobs=-1, cv=7, refit=True, verbose=1)
     grid.fit(x_train, y_train)
     print(grid.best_params_)
 
     # Train optimized classifier
-    knn_optimized = KNeighborsClassifier(n_neighbors=grid.best_params_.get('n_neighbors'))
+    knn_optimized = KNeighborsClassifier(n_neighbors=grid.best_params_.get('n_neighbors'),
+                                         weights=grid.best_params_.get('weights'),
+                                         metric=grid.best_params_.get('metric'))
     knn_optimized.fit(x_train, y_train)
 
     return knn_optimized
@@ -65,12 +70,12 @@ def compare_default_knn_with_optimized_knn():
           optimized_knn_accuracy - knn_accuracy)
 
 
-def knn_autograder():
+def knn_autograder(optimized = False):
     # Trains a default k-nearest neighbor classifier on the
     # labeled_images data, estimates the labels for the
     # autograder_images, and places the results in autograder.txt
     x_train, x_test, y_train, y_test = preprocess(labeled_images)
-    knn = default_knn(x_train, y_train)
+    knn = optimized_knn(x_train, y_train) if optimized else default_knn(x_train, y_train)
 
     x = autograder_images.reshape(autograder_images.shape[0], -1)
     estimate = accuracy(knn, x_test, y_test)
@@ -78,3 +83,7 @@ def knn_autograder():
 
     result = np.append(estimate, prediction)
     pd.DataFrame(result).to_csv("autograder.txt", index=False, header=False)
+
+
+# compare_default_knn_with_optimized_knn()
+# knn_autograder(optimized=True)
