@@ -37,13 +37,7 @@ def optimized_knn(x_train, y_train):
     grid.fit(x_train, y_train)
     print(grid.best_params_)
 
-    # Train optimized classifier
-    knn_optimized = KNeighborsClassifier(n_neighbors=grid.best_params_.get('n_neighbors'),
-                                         weights=grid.best_params_.get('weights'),
-                                         metric=grid.best_params_.get('metric'))
-    knn_optimized.fit(x_train, y_train)
-
-    return knn_optimized
+    return grid.best_estimator_
 
 
 def accuracy(classifier, x_test, y_test):
