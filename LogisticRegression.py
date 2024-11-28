@@ -61,15 +61,6 @@ pd.DataFrame(result).to_csv("autograder.txt", index=False, header=False)
 # ax.legend(loc="upper left")
 # plt.show()
 
-# from sklearn.dummy import DummyClassifier
-# from sklearn.model_selection import cross_val_score
-#
-# clf = DummyClassifier(strategy='most_frequent', random_state=0)
-# dummy_cv_scores = cross_val_score(clf, X_train, y_train, cv=5)
-# print(dummy_cv_scores)
-# clf.fit(X_train, y_train)
-# clf.score(X_test, y_test)
-#
 # from sklearn import preprocessing
 # import numpy as np
 # X_train = np.array([[ 1., -1.,  2.],
