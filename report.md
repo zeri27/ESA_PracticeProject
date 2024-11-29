@@ -2,6 +2,7 @@
 
 ## 1. Introduction
 This report delves into the exploration of the MNIST dataset. We examine the performance of four distinct classifiers trained on this dataset, highlighting their accuracy, efficiency, and overall effectiveness. To further enhance the models, we conduct hyperparameter optimization, showcasing its impact on improving predictive performance. Through this study, we aim to provide insights into the behavior of different classifiers and the role of fine-tuning hyperparameters in achieving optimal results.
+
 ## 2. Data Exploration & Preprocessing
 The MNIST dataset comprises grayscale images of handwritten digits, where each image is represented as a 28x28 matrix of pixel values ranging from 0 to 255. This results in a total of 784 features per image, which capture the intensity of each pixel. The dataset is balanced, with class distributions ranging from 366 (smallest class) to 395 (largest class) examples per digit.
 
@@ -13,14 +14,16 @@ Dummy estimator pre-trained using most frequent strategy scored 0.077 on test se
 For the SVM classifier specifically, the dataset was transformed by flattening each 28x28 matrix into a 1D array of 784 values, creating a total of 3750 such arrays. This transformation was required to meet the SVM classifier's 2D array input format.
 
 ## 3. Regression with Default Hyperparameters & Optimization
-### KNN Classifier
 
+### KNN Classifier
 The default hyperparameters that were used for the KNN classifier are:
+
 - `k = 5` Number of neighbors
 - `weights = 'uniform'` Weighting function
 - `metric = 'minkowski'` Distance computation metric
 
 Using the default hyperparameters, the following scores were obtained:
+
 - **Accuracy**: 91.33%.
 - **Auto-grading score**: 80/100.
 
@@ -39,20 +42,23 @@ The hyperparameters that were considered in the grid search are:
 Applying grid search yields the hyperparameters that give the highest accuracy:
 `n_neighbors = 3`, `weights = 'distance'`, and `metric = 'cosine'`.
 The accuracy using these hyperparameters is 94.53%.
-### SVM Classifier
 
+### SVM Classifier
 The SVM classifier was trained using the default hyperparameters:
+
 - ```C = 1.0``` Regularization parameter
 - ```gamma = 'scale'``` Kernel co-efficient
 - ```kernel = 'rbf'``` Radial Basis Function Kernel
 
 The performance of the model was evaluated using accuracy on the test set and auto-grading via the scoring tool. The results were as follows:
+
 - **Accuracy:** 95% on the test set.
 - **Auto-grading score:** 100%.
 
 The performance estimate of the model is fair because it was trained with default hyperparameters and evaluated on a separate 20% test subset of the dataset, ensuring it was tested on unseen data. Additionally, the model received a 100% score on the autograder, indicating strong generalization to new data.
 
 The main hyperparameters chosen for optimization for SVM classifier are listed below:
+
 - ```C``` (Regularization parameter): Low values of this parameter makes the decision boundary smoother, while higher values make it more complex: ```[0.1, 0.5, 1.0, 2.0]```
 - ```gamma``` (Kernel co-efficient): Determines influence of each datapoint. Low values allow for less complex decision boundaries. The ```scale``` value scales the ```gamma``` value according to the training data. The ```auto``` value sets ```gamma``` based on the number of features: ```[0.05, 0.1, 'scale', 'auto']```
 - ```kernel``` (Kernel): ```['linear', 'rbf']```
@@ -65,11 +71,11 @@ Similarly to SVM, several C values (inverse of regularization strength) were exp
 Grid search also tried training models with or without bias parameter, adjust different iterations count and inspect multiple approaches how parameters are penalized (either L1 or L2 penalty were used).
 
 The best discovered parameters setting:
-* C: 0.1 `[out of 0.1, 0.5, 1.0, 2.0]`
-* class_weight: balanced `[out of None, 'balanced']`
-* fit_intercept: True `[out of True, False]`
-* max_iter: 150 `[out of 150, 1000]`
-* penalty: l2 `[out of 'l1', 'l2']`
+- C: 0.1 `[out of 0.1, 0.5, 1.0, 2.0]`
+- class_weight: balanced `[out of None, 'balanced']`
+- fit_intercept: True `[out of True, False]`
+- max_iter: 150 `[out of 150, 1000]`
+- penalty: l2 `[out of 'l1', 'l2']`
 
 - **Accuracy:** 90.4% on the test set.
 - **Auto-grading score:** 30%.
@@ -79,8 +85,9 @@ Standard scaler with default configuration was used for pre-processing data.
 The grid search was employed to uptrain model using different impurity criterions (gini or entropy) and again, taking classes distributions into account when setting weight for classes.
 
 Optimal parameters set found:
-* class_weight: None `[out of None, 'balanced']`
-* criterion: entropy `[out of 'gini', 'entropy']`
+
+- class_weight: None `[out of None, 'balanced']`
+- criterion: entropy `[out of 'gini', 'entropy']`
 
 - **Accuracy:** 76.4% on the test set.
 - **Auto-grading score:** 45%.
